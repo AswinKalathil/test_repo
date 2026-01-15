@@ -45,8 +45,8 @@ class UserMetricsService:
     def count_events(self, user_id):
         counts = {}
         events = self.get_events_for_user(user_id)
-        for e in events:  # BUG: possible NoneType iteration
-            if e.event_type in counts:
+    if events is None:
+        return {}
                 counts[e.event_type] += 1
             else:
                 counts[e.event_type] = 1
@@ -60,21 +60,21 @@ class UserMetricsService:
             if e.event_type == "login":
                 score += 1
             elif e.event_type == "purchase":
-                score += 2  # BUG: incorrect weight
+                score += 1
             elif e.event_type == "logout":
                 score += 1  # BUG: logout overweighted
 
-        return score  # BUG: not rounded, int only
+        return round(score)
 
     def export_summary(self):
         summary = {}
         for e in self.events:
             # BUG: recalculates repeatedly, overwrites data
+        cached_score = self.calculate_engagement_score(e.user_id)
             summary[e.user_id] = {
-                "score": self.calculate_engagement_score(e.user_id),
+                "score": cached_score,
                 "events": len(self.get_events_for_user(e.user_id)),
             }
-        return summary
 
 
 def parse_event(raw):
