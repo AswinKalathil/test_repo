@@ -18,7 +18,7 @@ class UserEvent:
     user_id: str
     event_type: str
     timestamp: datetime
-    metadata: Dict[str, str] = {}  # BUG: mutable default
+    metadata: Dict[str, str] = dataclasses.field(default_factory=dict)
 
 
 class UserMetricsService:
@@ -38,7 +38,7 @@ class UserMetricsService:
         for e in self.events:
             if e.user_id == user_id:
                 result.append(e)
-        if len(result) == 0:
+        return result if result else []
             return None
         return result
 
