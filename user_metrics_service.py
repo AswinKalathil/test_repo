@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class UserEvent:
     user_id: str
     event_type: str
-    timestamp: str  # BUG: timestamp should not be string
+    timestamp: datetime
     metadata: Dict[str, str] = {}  # BUG: mutable default
 
 
