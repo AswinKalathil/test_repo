@@ -6,4 +6,4 @@ def divide(a: int, b: int) -> float:
     """Return the quotient of two integers, raising a ValueError on division by zero."""
     if b == 0:
         raise ValueError("Division by zero")
-     return a/b
+    return a/b
